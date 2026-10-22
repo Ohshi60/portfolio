@@ -7,10 +7,110 @@
 		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
 		<link rel="icon" href="/favicon.ico" />
 		<meta name="viewport" content="width=device-width" />
-		<meta name="generator" content={Astro.generator} />
-		<title>Astro</title>
+		<meta name="description" content="Personal portfolio of a software engineer" />
+		<title>Michael Søby | Developer</title>
 	</head>
 	<body>
-		<h1>Astro</h1>
+		<header>
+			<a href="/" class="logo">Michael Sebastian Søby</a>
+			<nav aria-label="Main navigation">
+				<a href="/" aria-current="page">Home</a>
+				<a href="/" >Projects</a>
+				<a href="/" >Writing</a>
+			</nav>
+
+			<button type="button" aria-label="Toggle colour theme">
+				◐
+			</button>
+		</header>
+
+		<main>
+			<section class="hero">
+				<div class="hero-content">
+					<p class="eyebrow">HELLO, I'M</p>
+					<h1>Michael</h1>
+					<h2>Software Developer</h2>
+
+					<p>
+						I'm a backend-focused software engineer who enjoys building reliable applications, APIs and tools.
+					</p>
+					<div class="hero-actions">
+						<a href="/projects/">View my projects</a>
+						<a href="/cv.pdf">View CV</a>
+					</div>
+				</div>
+				<div class="hero-image">
+					<p>Image goes here</p>
+				</div>
+			</section>
+
+			<section class="featured">
+				<div class="project-top">
+					<div class="project-details">
+						<p class="eyebrow">FEATURED PROJECT</p>
+						<h2>OpsPilot</h2>
+						<p> An incident investigation tool focused on finding root causes
+				rather than just symptoms.</p>
+						<a href="/projects/opspilot/">View project</a>
+					</div>
+					<div class="project-image">
+						<p>Image goes here</p>
+					</div>
+				</div>
+			</section>
+			<section class="tech-stack" aria-label="Technical skills">
+					<div class="feat-skills">
+						<p>Icon here</p>
+						<h3>Backend</h3>
+						<p>Typescript - Node.js - Fastify</p>
+					</div>
+					<div class="feat-skills">
+						<p>Icon here</p>
+						<h3>Database</h3>
+						<p>PostgreSQL- MongoDB - Neo4j</p>
+					</div>
+					<div class="feat-skills">
+						<p>Icon here</p>
+						<h3>Infrastructure</h3>
+						<p>Terraform - GCP - Linux</p>
+					</div>
+			</section>
+
+			<section class="writings">
+				<div class="blog-about">
+					<h2>Latest writing</h2>
+					<p>Notes on software, music and other interests</p>
+					<a href="/blog">View all posts</a>
+				</div>
+				<div class="blog-latest">
+					<article class="blog-summary">
+						<div class="blog-preview-image">Image placeholder</div>
+						<h3>Title</h3>
+						<time datetime="22-11-2222">22-11-2222</time>
+					</article>
+					<article class="blog-summary">
+						<div class="blog-preview-image">Image placeholder</div>
+						<h3>Title</h3>
+						<time datetime="22-11-2222">22-11-2222</time>
+					</article>
+					<article class="blog-summary">
+						<div class="blog-preview-image">Image placeholder</div>
+						<h3>Title</h3>
+						<time datetime="22-11-2222">22-11-2222</time>
+					</article>
+				</div>
+			</section>
+			<footer>
+				<div class="footer-about">
+					<h5>Michael Søby</h5>
+					<p>Software Developer</p>
+				</div>
+				<nav class="footer-socials">
+						<a href="/git">Github</a>
+						<a href="/git">LinkedIn</a>
+						<a href="/git">Email</a>
+				</nav>
+			</footer>
+		</main>
 	</body>
 </html>
