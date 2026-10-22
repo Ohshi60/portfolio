@@ -1,9 +1,10 @@
 ---
 import "../styles/global.css";
 import "@fontsource/dm-sans";
+import ThemeToggle from "../components/ThemeToggle.astro";
 ---
 
-<html lang="en">
+<html lang="en" data-theme="dark">
   <head>
     <meta charset="utf-8" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
@@ -14,6 +15,29 @@ import "@fontsource/dm-sans";
       content="Personal portfolio of a software engineer"
     />
     <title>Michael Søby | Developer</title>
+
+    <script is:inline>
+      (() => {
+        let savedTheme = null;
+
+        try {
+          savedTheme = localStorage.getItem("theme");
+        } catch {
+          // Storage may be unavailable.
+        }
+
+        const prefersDark = window.matchMedia(
+          "(prefers-color-scheme: dark)",
+        ).matches;
+
+        document.documentElement.dataset.theme =
+          savedTheme === "light" || savedTheme === "dark"
+            ? savedTheme
+            : prefersDark
+              ? "dark"
+              : "light";
+      })();
+    </script>
   </head>
   <body>
     <header>
@@ -27,10 +51,7 @@ import "@fontsource/dm-sans";
         <a href="/">Projects</a>
         <a href="/">Writing</a>
       </nav>
-
-      <button type="button" aria-label="Toggle colour theme">
-        ◐
-      </button>
+      <ThemeToggle />
     </header>
 
     <main>
