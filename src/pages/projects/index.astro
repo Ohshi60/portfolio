@@ -11,4 +11,40 @@ import BaseLayout from "../../layouts/BaseLayout.astro";
     <h1>Projects</h1>
     <p>A selection of projects I've built, explored, and learned from.</p>
   </section>
+
+  <section class="projects-list" aria-label="Projects">
+    <article class="project-card">
+      <div class="project-card-image">Project preview</div>
+
+      <div class="project-card-content">
+        <p class="project-status">In development</p>
+
+        <h2>Incidetective</h2>
+
+        <p class="project-description">
+          An incident investigation tool for backend services, designed to
+          organize logs, evidence, and investigation reports.
+        </p>
+
+        <ul class="project-technologies" aria-label="Technologies">
+          <li>TypeScript</li>
+          <li>Node.js</li>
+          <li>Fastify</li>
+          <li>Vitest</li>
+        </ul>
+
+        <div class="project-card-links">
+          <a href="/projects/incidetective/">View project →</a>
+
+          <a
+            href="https://github.com/Ohshi60/Incidetective"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            GitHub ↗
+          </a>
+        </div>
+      </div>
+    </article>
+  </section>
 </BaseLayout>

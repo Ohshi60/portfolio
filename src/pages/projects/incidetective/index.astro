@@ -1,0 +1,84 @@
+---
+import BaseLayout from "../../../layouts/BaseLayout.astro";
+---
+
+<BaseLayout
+  title="Incidetective | Michael"
+  description="A backend incident investigation project built with TypeScript."
+>
+  <article class="project-detail">
+    <header class="project-detail-header">
+      <a href="/projects/" class="back-link">
+        ← Back to projects
+      </a>
+
+      <p class="eyebrow">PERSONAL PROJECT · IN DEVELOPMENT</p>
+
+      <h1>Incidetective</h1>
+
+      <p class="project-lead">
+        Exploring how backend engineers can investigate service incidents by
+        organizing logs, evidence, and findings.
+      </p>
+
+      <div class="project-detail-links">
+        <a
+          href="https://github.com/Ohshi60/Incidetective"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          View source on GitHub ↗
+        </a>
+      </div>
+    </header>
+
+    <div class="project-detail-body">
+      <section>
+        <h2>The problem</h2>
+        <p>
+          Investigating service failures often means working through logs,
+          identifying relevant events, and collecting evidence before
+          understanding what went wrong.
+        </p>
+        <p>
+          Incidetective is a learning project focused on making that
+          investigation process more structured.
+        </p>
+      </section>
+
+      <section>
+        <h2>Technical approach</h2>
+        <p>
+          The project uses TypeScript and Node.js, with an emphasis on
+          separating incident data, log evidence, and investigation logic.
+        </p>
+        <p>
+          Automated tests help verify the expected behavior, including keeping
+          evidence associated with the correct incident.
+        </p>
+      </section>
+
+      <section>
+        <h2>Project goals</h2>
+        <p>
+          The longer-term goal is to support searching synthetic logs,
+          assembling investigation reports, and experimenting with optional
+          AI-assisted analysis.
+        </p>
+        <p>
+          The project is still in development, so these goals should not be
+          interpreted as completed features.
+        </p>
+      </section>
+
+      <section>
+        <h2>Technologies</h2>
+        <ul class="project-detail-tech">
+          <li>TypeScript</li>
+          <li>Node.js</li>
+          <li>Vitest</li>
+        </ul>
+      </section>
+    </div>
+  </article>
+</BaseLayout>
