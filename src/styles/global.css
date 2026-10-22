@@ -18,6 +18,8 @@ body {
     sans-serif;
   background-color: var(--color-background);
   color: var(--color-text);
+  font-size: 1rem;
+  line-height: 1.6;
 }
 
 header {
@@ -209,13 +211,7 @@ main {
   }
 }
 
-/* Skills */
-.tech-stack {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 1rem;
-  padding-block: 2rem 4rem;
-}
+/* Tech stack */
 
 .feat-skills {
   display: grid;
@@ -242,7 +238,7 @@ main {
   margin: 0;
   color: var(--color-muted);
   font-family: "SFMono-Regular", Consolas, "Liberation Mono", monospace;
-  font-size: 0.8rem;
+  font-size: 0.875rem;
   line-height: 1.6;
 }
 
@@ -326,7 +322,8 @@ main {
 
 .blog-summary h3 {
   margin: 0 0 0.25rem;
-  font-size: 1rem;
+  font-size: 1.125rem;
+  font-weight: 600;
   line-height: 1.4;
 }
 
