@@ -1,0 +1,266 @@
+:root {
+  --color-background: #faf9f6;
+  --color-text: #242424;
+  --color-muted: #6b6b6b;
+  --color-accent: #315c81;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family:
+    "DM Sans",
+    system-ui,
+    -apple-system,
+    sans-serif;
+  background-color: var(--color-background);
+  color: var(--color-text);
+}
+
+header {
+  max-width: 1100px;
+  margin-inline: auto;
+  padding: 1.5rem 2rem;
+
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 2rem;
+}
+
+nav {
+  display: flex;
+  gap: 1.5rem;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+a:hover {
+  color: var(--color-accent);
+}
+
+main {
+  max-width: 1100px;
+  margin-inline: auto;
+  padding-inline: 2rem;
+}
+
+/* Hero section */
+.hero {
+  display: grid;
+  grid-template-columns: 1.2fr 0.8fr;
+  align-items: center;
+  gap: 3rem;
+  padding-block: 5rem;
+  padding-top: 1rem;
+}
+
+.hero-content {
+  min-width: 0;
+}
+
+.hero .eyebrow {
+  color: var(--color-muted);
+  font-size: 0.8rem;
+  font-weight: 600;
+  letter-spacing: 0.12rem;
+  margin-bottom: 0.25rem;
+}
+
+.hero h1 {
+  font-size: clamp(3rem, 6vw, 4.5rem);
+  margin-top: 0;
+  margin-bottom: 0.5rem;
+}
+
+.hero h2 {
+  font-size: clamp(1.5rem, 3vw, 2rem);
+  font-weight: 500;
+  margin-bottom: 1rem;
+}
+.hero-content > p:not(.eyebrow) {
+  color: var(--color-muted);
+  line-height: 1.7;
+  max-width: 36rem;
+  margin-bottom: 1.5rem;
+}
+.hero-image {
+  min-height: 320px;
+  border-radius: 12px;
+  background: #e8e5df;
+
+  display: grid;
+  place-items: center;
+  color: var(--color-muted);
+}
+
+@media (max-width: 650px) {
+  .hero {
+    grid-template-columns: 1fr;
+    gap: 2rem;
+    padding-block: 3rem;
+  }
+
+  .hero-image {
+    min-height: 240px;
+  }
+}
+
+.hero-actions {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.button {
+  display: inline-block;
+  padding: 0.75rem 1.25rem;
+  border: 1px solid var(--color-text);
+  border-radius: 6px;
+  font-size: 0.95rem;
+  font-weight: 500;
+  transition:
+    background-color 150ms ease,
+    color 150ms ease;
+}
+
+.button-primary {
+  background-color: var(--color-text);
+  color: var(--color-background);
+}
+
+.button-primary:hover {
+  background-color: var(--color-accent);
+  border-color: var(--color-accent);
+  color: white;
+}
+.button-secondary {
+  border-color: #d5d1ca;
+}
+.button-secondary:hover {
+  background-color: #e8e5df;
+  color: var(--color-text);
+}
+
+/* featured projects */
+.featured {
+  padding-block: 4rem;
+  border-top: 1px solid #e5e1da;
+}
+.project-top {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  align-items: center;
+  gap: 3rem;
+}
+
+.project-details .eyebrow {
+  color: var(--color-muted);
+  font-size: 0.8rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  margin-bottom: 0.5rem;
+}
+
+.project-details h2 {
+  font-size: 2.5rem;
+  letter-spacing: -0.03em;
+  margin-top: 0;
+  margin-bottom: 1rem;
+}
+
+.project-details > p:not(.eyebrow) {
+  color: var(--color-muted);
+  line-height: 1.7;
+  margin-bottom: 1.5rem;
+}
+
+.project-image {
+  min-height: 280px;
+  border-radius: 12px;
+  background: #e8e5df;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--color-muted);
+}
+
+@media (max-width: 650px) {
+  .project-top {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+}
+
+/* Skills */
+.tech-stack {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1rem;
+  padding-block: 2rem 4rem;
+}
+
+.feat-skills {
+  display: grid;
+  grid-template-columns: 2rem minmax(0, 1fr);
+  column-gap: 0.75rem;
+  align-items: start;
+}
+
+.feat-skills > p:first-child {
+  grid-column: 1;
+  grid-row: 1 / span 2;
+  margin: 0;
+  color: var(--color-accent);
+}
+
+.feat-skills h3 {
+  grid-column: 2;
+  margin: 0 0 0.25rem;
+  font-size: 1rem;
+}
+
+.feat-skills p:not(:first-child) {
+  grid-column: 2;
+  margin: 0;
+  color: var(--color-muted);
+  font-family: "SFMono-Regular", Consolas, "Liberation Mono", monospace;
+  font-size: 0.8rem;
+  line-height: 1.6;
+}
+
+.tech-stack {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1.5rem;
+  padding-block: 1rem 4rem;
+}
+
+@media (max-width: 700px) {
+  .tech-stack {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+}
+
+.skill-icon {
+  grid-column: 1;
+  grid-row: 1 / span 2;
+  width: 1.5rem;
+  height: 1.5rem;
+  color: var(--color-accent);
+}
+
+.skill-icon svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
