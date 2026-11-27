@@ -2,12 +2,20 @@
 import BaseLayout from "../layouts/BaseLayout.astro";
 import Todo from "../components/Todo.astro";
 import { Image } from "astro:assets";
+import headshot from "../assets/headshot.jpg";
+import decks from "../assets/about/decks.jpg";
+import lily58 from "../assets/about/lily58.jpg";
+import lily58Underside from "../assets/about/lily58-underside.jpg";
+import kyria from "../assets/about/kyria.jpg";
+import kyriaUnderside from "../assets/about/kyria-underside.jpg";
+import keyboardsProfile from "../assets/about/keyboards-profile.jpg";
 
 // ---------------------------------------------------------------------------
 // Content. Any value starting with "TODO:" renders as a visible placeholder.
-// Keyboard photos: put them in src/assets/about/ and import them, e.g.
-//   import corne from "../assets/about/corne.jpg";
-// then set `image: corne` on the keyboard below.
+// Photos: put them in src/assets/about/ and import them, e.g.
+//   import kyria from "../assets/about/kyria.jpg";
+// then set `image: kyria` on the keyboard (or `image` on records) below.
+// Strip location metadata first: the repo is public.
 // ---------------------------------------------------------------------------
 
 const homelab = {
@@ -37,56 +45,66 @@ const homelab = {
     },
   ],
   specs: [
-    { area: "Platform", value: "Proxmox, Coolify" },
-    { area: "Local AI", value: "Ollama on my desktop GPU" },
+    { area: "Platform", value: "3-node Proxmox VE cluster, Coolify for apps" },
     {
       area: "Runs",
-      value: "Incidetective, Night City dashboard, TODO: other services",
+      value: "Home Assistant, Jellyfin, Incidetective, Night City dashboard",
     },
-    { area: "Network", value: "TODO: e.g. router, VLANs, VPN, DNS" },
+    { area: "Ingress", value: "Caddy as reverse proxy, Cloudflare Tunnel" },
+    { area: "Local AI", value: "Ollama on my desktop GPU" },
   ],
 };
 
 const keyboardsIntro =
-  "Both are kits from splitkb that I assembled myself. TODO: why split keyboards: ergonomics, the fun of building, tweaking the layout";
+  "Both are kits from splitkb that I soldered and assembled myself, and both run the stock firmware. What I learned: next time I'd go wireless, and I'd skip the RGB. It was a lot of extra soldering for lights I barely use.";
 
 type Keyboard = {
   name: string;
   layout: string;
   switches: string;
-  notes: string;
+  extras: string;
   image?: ImageMetadata;
+  /** Optional second photo, revealed on hover/focus (e.g. the soldered underside). */
+  underside?: ImageMetadata;
 };
 
 const keyboards: Keyboard[] = [
   {
     name: "Lily58",
     layout: "58 keys, column-staggered, with a number row",
-    switches: "TODO: switches and keycaps",
-    notes:
-      "TODO: what you built yourself (soldering, firmware, case) and what you learned",
+    switches: "Gazzew Boba U4, silent tactile (62 g)",
+    extras: "Rotary encoder, RGB, low-profile case",
+    image: lily58,
+    underside: lily58Underside,
   },
   {
     name: "Kyria",
     layout: "Column-staggered, with a big thumb cluster",
-    switches: "Kailh Choc, for a low profile TODO: which Chocs, and keycaps",
-    notes: "TODO: build notes",
+    switches: "Kailh Choc Sunset, low-profile tactile (40 gf)",
+    extras: "Two OLED displays, RGB, low-profile case",
+    image: kyria,
+    underside: kyriaUnderside,
   },
 ];
 
 const records = {
   intro:
-    "I'm a bedroom DJ, mixing records at home for the fun of it. I also collect vinyl, mostly dug out of crates at markets and thrift stores, where half the fun is finding something I didn't know I was looking for.",
+    "I'm a bedroom DJ. It started with golden-age hip hop, and I fell in love with scratching. These days it's sampling that excites me most: recognising where a sample comes from and going down rabbit holes on WhoSampled. That's what drives my crate digging too, mostly at markets and thrift stores, always on the lookout for something worth sampling.",
   // Optional: a photo of the decks, e.g. import decks from "../assets/about/decks.jpg"
-  image: undefined as ImageMetadata | undefined,
+  image: decks as ImageMetadata | undefined,
   setup: [
     {
       area: "Turntables",
       value: "2 × Technics SL-1210 MK2",
     },
     { area: "Mixer", value: "Pioneer DJM-400" },
-    { area: "Digs for", value: "TODO: genres you collect and mix" },
-    { area: "Best find", value: "TODO: a favourite record or dig story" },
+    { area: "Roots", value: "Golden-age hip hop and scratching" },
+    { area: "Digs for", value: "Anything worth sampling" },
+    {
+      area: "Best find",
+      value:
+        "Santa Esmeralda's \"Don't Let Me Be Misunderstood\" on LP. It's the track behind the Bride's fight with O-Ren Ishii in Kill Bill Vol. 1, and the album version turns out to run about 15 minutes.",
+    },
   ],
 };
 
@@ -100,8 +118,8 @@ const splitTodo = (value: string) => {
 ---
 
 <BaseLayout
-  title="About | Michael"
-  description="About Michael: backend developer, homelab tinkerer, split-keyboard builder and bedroom DJ."
+  title="About | Michael Søby"
+  description="About Michael Søby: backend engineer, homelab tinkerer, split-keyboard builder and bedroom DJ."
 >
   <div class="about">
     <header class="about-header">
@@ -115,12 +133,22 @@ const splitTodo = (value: string) => {
           usually at the turntables or digging for records.
         </p>
         <p class="about-lead">
-          <Todo text="a few lines about you: where you're based, what you work on, what you're looking for" />
+          I'm based in Copenhagen and studied software engineering at Aalborg
+          University. I've worked as a fullstack developer, mostly on the
+          backend side: APIs, databases, and the production issues that come
+          with them. I'm currently looking for my next backend role.
         </p>
       </div>
 
       <div class="about-photo">
-        <img src="/images/cv_headshot.jpg" alt="Michael" />
+        <Image
+          src={headshot}
+          alt="Michael Søby"
+          widths={[200, 400]}
+          sizes="200px"
+          loading="eager"
+          fetchpriority="high"
+        />
       </div>
     </header>
 
@@ -167,15 +195,16 @@ const splitTodo = (value: string) => {
       </dl>
 
       <p class="about-crosslink">
-        Two of my projects run here: the{" "}
+        Both{" "}
+        <a class="link-arrow" href="/projects/incidetective/">
+          Incidetective <span aria-hidden="true">→</span>
+        </a>{" "}
+        and the{" "}
         <a class="link-arrow" href="/projects/night-city-dashboard/">
           Night City dashboard <span aria-hidden="true">→</span>
         </a>{" "}
-        and{" "}
-        <a class="link-arrow" href="/projects/incidetective/">
-          Incidetective <span aria-hidden="true">→</span>
-        </a>
-        , which also got one of its real test incidents from here.
+        run here, and one of Incidetective's real test incidents came from here
+        too.
       </p>
     </section>
 
@@ -192,18 +221,37 @@ const splitTodo = (value: string) => {
       <div class="keyboard-grid">
         {keyboards.map((kb) => (
           <article class="keyboard-card">
-            <div class="keyboard-photo">
-              {kb.image ? (
+            {kb.image && (
+              <div
+                class:list={[
+                  "keyboard-photo",
+                  { "has-underside": kb.underside },
+                ]}
+                tabindex={kb.underside ? 0 : undefined}
+              >
                 <Image
                   src={kb.image}
-                  alt={kb.name}
+                  alt={`My ${kb.name} keyboard, both halves seen from above`}
                   widths={[400, 800]}
                   sizes="(max-width: 700px) 100vw, 400px"
                 />
-              ) : (
-                <span>Photo</span>
-              )}
-            </div>
+                {kb.underside && (
+                  <>
+                    <Image
+                      class="keyboard-photo-underside"
+                      src={kb.underside}
+                      alt={`The underside of my ${kb.name} through its clear acrylic bottom plate, showing the hand-soldered diodes and LEDs`}
+                      widths={[400, 800]}
+                      sizes="(max-width: 700px) 100vw, 400px"
+                    />
+                    <span class="keyboard-flip-hint" aria-hidden="true">
+                      <span class="hint-front">↻ Underside</span>
+                      <span class="hint-back">↻ Top</span>
+                    </span>
+                  </>
+                )}
+              </div>
+            )}
             <div class="keyboard-body">
               <h3>
                 {isTodo(kb.name) ? <Todo text={stripTodo(kb.name)} /> : kb.name}
@@ -228,18 +276,28 @@ const splitTodo = (value: string) => {
                     )}
                   </dd>
                 </div>
+                <div>
+                  <dt>Extras</dt>
+                  <dd>{kb.extras}</dd>
+                </div>
               </dl>
-              <p>
-                {isTodo(kb.notes) ? (
-                  <Todo text={stripTodo(kb.notes)} />
-                ) : (
-                  kb.notes
-                )}
-              </p>
             </div>
           </article>
         ))}
       </div>
+
+      <figure class="photo keyboards-profile">
+        <Image
+          src={keyboardsProfile}
+          alt="The two keyboards side by side at desk level: the Kyria's low-profile Choc switches and keycaps on the left, much flatter than the Lily58's taller MX-style switches and keycaps on the right."
+          widths={[400, 800, 1200, 1600]}
+          sizes="(max-width: 864px) 100vw, 800px"
+        />
+        <figcaption>
+          Low profile next to standard height: the Kyria's Kailh Chocs beside
+          the Lily58's MX-style switches.
+        </figcaption>
+      </figure>
     </section>
 
     <section class="about-section" aria-labelledby="records-title">
@@ -247,18 +305,16 @@ const splitTodo = (value: string) => {
       <h2 id="records-title">Turntables and crate digging</h2>
       <p class="about-text">{records.intro}</p>
 
-      <div class="records-photo">
-        {records.image ? (
+      {records.image && (
+        <div class="records-photo">
           <Image
             src={records.image}
-            alt="My DJ setup: two Technics turntables and a Pioneer DJM-400 mixer"
-            widths={[800, 1600]}
+            alt="My DJ setup: two Technics SL-1210 turntables either side of a Pioneer DJM-400 mixer, on a shelf full of records, with Enter the Wu-Tang and Illmatic on the wall above"
+            widths={[400, 800, 1200, 1600]}
             sizes="(max-width: 864px) 100vw, 800px"
           />
-        ) : (
-          <span>Photo of the decks</span>
-        )}
-      </div>
+        </div>
+      )}
 
       <dl class="project-facts">
         {records.setup.map((row) => (

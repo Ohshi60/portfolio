@@ -2,7 +2,7 @@
 import { Image } from "astro:assets";
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import incidetectiveThumb from "../../assets/incidetective/incidetective-detail.png";
-import nightCityThumb from "../../assets/night-city/overview-day.png";
+import nightCityThumb from "../../assets/night-city/ipad-desk.jpg";
 
 const projects = [
   {
@@ -23,26 +23,29 @@ const projects = [
     repo: "https://github.com/Ohshi60/night-city-dashboard",
     image: nightCityThumb,
     imageAlt:
-      "Night City dashboard showing lighting scenes, electricity prices and vacuum status",
+      "The Night City dashboard running on a first-generation iPad mini on a desk",
     description:
-      "A wall-mounted Home Assistant dashboard for my apartment, built to run on a 2012 iPad mini: lighting scenes, electricity prices with the cheapest time to run appliances, and vacuum status in plain language.",
+      "A Home Assistant dashboard for my apartment, built to run on a 2012 iPad mini: lighting scenes, electricity prices with the cheapest time to run appliances, and vacuum status in plain language.",
     technologies: ["Node.js", "Fastify", "ES5 JavaScript", "Home Assistant"],
   },
 ];
 ---
 
 <BaseLayout
-  title="Projects | Michael"
-  description="Software projects I've built and worked on."
+  title="Projects | Michael Søby"
+  description="Projects by Michael Søby: Incidetective, a tool for investigating backend failures, and the Night City Home Assistant dashboard."
 >
   <section class="page-intro">
     <p class="eyebrow">SELECTED WORK</p>
     <h1>Projects</h1>
-    <p>A selection of projects I've built, explored, and learned from.</p>
+    <p>
+      Things I've built for my own use and run on my own hardware: a tool for
+      working out why a service failed, and the dashboard on my desk.
+    </p>
   </section>
 
   <section class="projects-list" aria-label="Projects">
-    {projects.map((project) => (
+    {projects.map((project, index) => (
       <article class="project-card">
         <a href={project.href} class="project-card-image" tabindex="-1">
           <Image
@@ -50,6 +53,8 @@ const projects = [
             alt={project.imageAlt}
             widths={[360, 720]}
             sizes="(max-width: 700px) 100vw, 360px"
+            loading={index === 0 ? "eager" : "lazy"}
+            fetchpriority={index === 0 ? "high" : "auto"}
           />
         </a>
 

@@ -1,5 +1,7 @@
 ---
+import { Image } from "astro:assets";
 import ThemeToggle from "./ThemeToggle.astro";
+import headshot from "../assets/headshot.jpg";
 import { hasPublishedPosts } from "../lib/writing";
 
 const links = [
@@ -18,8 +20,14 @@ const isCurrent = (href: string) =>
 ---
 
 <header>
-  <a href="/" class="site-logo" aria-label="Michael, home">
-    <img src="/images/cv_headshot.jpg" alt="" />
+  <a href="/" class="site-logo" aria-label="Michael Søby, home">
+    <Image
+      src={headshot}
+      alt=""
+      widths={[48, 96]}
+      sizes="44px"
+      loading="eager"
+    />
   </a>
 
   <nav aria-label="Main navigation">

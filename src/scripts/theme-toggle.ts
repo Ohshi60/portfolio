@@ -1,8 +1,16 @@
 type Theme = "light" | "dark";
 
-const toggle = document.querySelector<HTMLButtonElement>("#theme-toggle");
+// Bundled module scripts run once per session, while view transitions
+// replace the header (and the button) on every navigation. So: one
+// document-level click listener, and the button's label is refreshed
+// on every page load.
+
+function currentTheme(): Theme {
+  return document.documentElement.dataset.theme === "dark" ? "dark" : "light";
+}
 
 function updateButton(theme: Theme) {
+  const toggle = document.querySelector<HTMLButtonElement>("#theme-toggle");
   if (!toggle) return;
 
   const isDark = theme === "dark";
@@ -17,17 +25,25 @@ function updateButton(theme: Theme) {
 
 function setTheme(theme: Theme) {
   document.documentElement.dataset.theme = theme;
-  localStorage.setItem("theme", theme);
+  // In-memory copy, read by the head script after each view transition, so
+  // the choice survives navigation even when localStorage is unavailable.
+  (window as Window & { __theme?: Theme }).__theme = theme;
+  try {
+    localStorage.setItem("theme", theme);
+  } catch {
+    // Storage may be unavailable (e.g. private browsing); the theme still
+    // applies for this page view.
+  }
   updateButton(theme);
 }
 
-updateButton(
-  document.documentElement.dataset.theme === "dark" ? "dark" : "light",
-);
-
-toggle?.addEventListener("click", () => {
-  const nextTheme =
-    document.documentElement.dataset.theme === "dark" ? "light" : "dark";
-
-  setTheme(nextTheme);
+document.addEventListener("click", (event) => {
+  const target = event.target as Element | null;
+  if (!target?.closest("#theme-toggle")) return;
+  setTheme(currentTheme() === "dark" ? "light" : "dark");
 });
+
+updateButton(currentTheme());
+document.addEventListener("astro:page-load", () =>
+  updateButton(currentTheme()),
+);

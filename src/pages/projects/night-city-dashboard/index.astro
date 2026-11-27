@@ -4,6 +4,7 @@ import BaseLayout from "../../../layouts/BaseLayout.astro";
 import overviewDay from "../../../assets/night-city/overview-day.png";
 import overviewNight from "../../../assets/night-city/overview-night.png";
 import vacuumDetails from "../../../assets/night-city/vacuum-details.png";
+import ipadDesk from "../../../assets/night-city/ipad-desk.jpg";
 
 const stack = [
   { area: "Backend", tech: "Node.js, Fastify" },
@@ -18,8 +19,8 @@ const stack = [
 ---
 
 <BaseLayout
-  title="Night City dashboard | Michael"
-  description="A wall-mounted Home Assistant dashboard built to run on a first-generation iPad mini."
+  title="Night City dashboard | Michael Søby"
+  description="A Home Assistant dashboard built to run on a first-generation iPad mini."
 >
   <article class="project-detail">
     <header class="project-detail-header">
@@ -32,9 +33,9 @@ const stack = [
       <h1>Night City dashboard</h1>
 
       <p class="project-lead">
-        A wall-mounted dashboard for my apartment's Home Assistant setup, built
-        to run on a first-generation iPad mini from 2012. One glance shows the
-        lights, the electricity price, the vacuum and the weather.
+        A dashboard for my apartment's Home Assistant setup, built to run on a
+        first-generation iPad mini from 2012. One glance shows the lights, the
+        electricity price, the vacuum and the weather.
       </p>
 
       <div class="project-detail-links">
@@ -48,22 +49,17 @@ const stack = [
       </div>
     </header>
 
-    <figure class="screenshot screenshot-lead">
-      <div class="screenshot-bar" aria-hidden="true">
-        <span></span>
-        <span></span>
-        <span></span>
-      </div>
+    <figure class="photo photo-lead">
       <Image
-        src={overviewDay}
-        alt="Night City dashboard overview: lighting scenes on the left; electricity price of 3.33 kr/kWh with a bar chart and the cheapest start times for the washing machine and dishwasher; vacuum status at 80% battery with a reminder to wipe the sensors."
-        widths={[800, 1600]}
+        src={ipadDesk}
+        alt="A first-generation iPad mini in a wooden stand on a desk, running the Night City dashboard: lighting scenes, electricity prices and the vacuum's status."
+        widths={[400, 800, 1200, 1600]}
         sizes="(max-width: 864px) 100vw, 800px"
         loading="eager"
+        fetchpriority="high"
       />
       <figcaption>
-        The overview, sized to fit the iPad mini's screen in landscape. Demo
-        data.
+        Running on a first-generation iPad mini on my desk.
       </figcaption>
     </figure>
 
@@ -88,6 +84,24 @@ const stack = [
           minute.
         </p>
       </section>
+
+      <figure class="screenshot">
+        <div class="screenshot-bar" aria-hidden="true">
+          <span></span>
+          <span></span>
+          <span></span>
+        </div>
+        <Image
+          src={overviewDay}
+          alt="Night City dashboard overview: lighting scenes on the left; electricity price of 3.33 kr/kWh with a bar chart and the cheapest start times for the washing machine and dishwasher; vacuum status at 80% battery with a reminder to wipe the sensors."
+          widths={[400, 680, 1020, 1360]}
+          sizes="(max-width: 744px) 100vw, 680px"
+        />
+        <figcaption>
+          The overview, sized to fit the iPad mini's screen in landscape. Demo
+          data.
+        </figcaption>
+      </figure>
 
       <section>
         <h2>What it shows</h2>
@@ -124,7 +138,7 @@ const stack = [
         <Image
           src={vacuumDetails}
           alt="Vacuum details panel: the last run didn't finish after 67 minutes and 35 square metres, the balcony was skipped because the door was closed and has been skipped in 2 of the last 2 runs, and wear levels for the brushes, filter, wheel and sensors."
-          widths={[680, 1360]}
+          widths={[400, 680, 1020, 1360]}
           sizes="(max-width: 744px) 100vw, 680px"
         />
         <figcaption>
@@ -169,7 +183,7 @@ const stack = [
         </p>
         <p>
           Between sunset and sunrise, the page switches to a dimmer, warmer
-          theme so it doesn't light up the room.
+          theme.
         </p>
       </section>
 
@@ -182,7 +196,7 @@ const stack = [
         <Image
           src={overviewNight}
           alt="The same overview in night mode, with dimmer, warmer colours."
-          widths={[680, 1360]}
+          widths={[400, 680, 1020, 1360]}
           sizes="(max-width: 744px) 100vw, 680px"
         />
         <figcaption>Night mode, from sunset to sunrise.</figcaption>

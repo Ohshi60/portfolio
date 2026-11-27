@@ -2,7 +2,7 @@
 import { Image } from "astro:assets";
 import BaseLayout from "../../../layouts/BaseLayout.astro";
 import detailScreenshot from "../../../assets/incidetective/incidetective-detail.png";
-import listScreenshot from "../../../assets/incidetective/incidetective-list.png";
+import aiScreenshot from "../../../assets/incidetective/ai-investigation.png";
 
 const pipeline = [
   {
@@ -35,7 +35,7 @@ const stack = [
 ---
 
 <BaseLayout
-  title="Incidetective | Michael"
+  title="Incidetective | Michael Søby"
   description="A self-hosted tool for investigating backend failures, combining deterministic log analysis with a local LLM."
 >
   <article class="project-detail">
@@ -75,9 +75,10 @@ const stack = [
       <Image
         src={detailScreenshot}
         alt="Incidetective incident view: a checkout incident with a summary of 70 errors across 180 logs, and its top failure pattern, a payment gateway timeout seen 40 times, with three original log lines as supporting evidence."
-        widths={[800, 1600]}
+        widths={[400, 800, 1200, 1600]}
         sizes="(max-width: 864px) 100vw, 800px"
         loading="eager"
+        fetchpriority="high"
       />
       <figcaption>
         An incident's failure patterns, each backed by the original log lines.
@@ -149,12 +150,16 @@ const stack = [
           <span></span>
         </div>
         <Image
-          src={listScreenshot}
-          alt="Incidetective incident list with searchable incident cards, each showing its service, severity, title and description."
-          widths={[680, 1360]}
+          src={aiScreenshot}
+          alt="Incidetective's AI investigation of the checkout incident: a summary, two ranked hypotheses with cited evidence (F1, F2) and next steps, one alert ruled out as a downstream symptom, and suggested follow-up diagnostics."
+          widths={[400, 680, 1020, 1360]}
           sizes="(max-width: 744px) 100vw, 680px"
         />
-        <figcaption>The incident list.</figcaption>
+        <figcaption>
+          An AI investigation of the checkout incident. The model's answer is a
+          hand-written stand-in; the prompt, evidence IDs, validation and UI are
+          the real app.
+        </figcaption>
       </figure>
 
       <section>
