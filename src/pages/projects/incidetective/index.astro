@@ -1,10 +1,42 @@
 ---
+import { Image } from "astro:assets";
 import BaseLayout from "../../../layouts/BaseLayout.astro";
+import detailScreenshot from "../../../assets/incidetective/incidetective-detail.png";
+import aiScreenshot from "../../../assets/incidetective/ai-investigation.png";
+
+const pipeline = [
+  {
+    step: "Import",
+    text: "One importer reads most log formats: JSON lines (Pino, Docker, journalctl), key=value logs (slog, logrus), syslog, nginx and Apache access logs, and timestamped text such as log4j. Logs are normalized and stored in PostgreSQL.",
+  },
+  {
+    step: "Cluster",
+    text: "Recurring errors are grouped with the Drain algorithm, keeping meaningful error codes intact, and ranked by how often they occur and when.",
+  },
+  {
+    step: "Add context",
+    text: "Warnings that came just before each error are pulled in, since the cause often shows up before the failure does.",
+  },
+  {
+    step: "Investigate",
+    text: "A local model running on Ollama receives that evidence, not the raw logs, and proposes possible causes with concrete diagnostic steps.",
+  },
+];
+
+const stack = [
+  { area: "Backend", tech: "Node.js, TypeScript, Fastify" },
+  { area: "Frontend", tech: "React, Vite, Tailwind CSS, shadcn/ui" },
+  { area: "Database", tech: "PostgreSQL, Drizzle ORM" },
+  { area: "Log clustering", tech: "Drain" },
+  { area: "Local AI", tech: "Ollama, Qwen3" },
+  { area: "Testing", tech: "Vitest" },
+  { area: "Deployment", tech: "Docker Compose, self-hosted on Coolify" },
+];
 ---
 
 <BaseLayout
-  title="Incidetective | Michael"
-  description="A backend incident investigation project built with TypeScript."
+  title="Incidetective | Michael Søby"
+  description="A self-hosted tool for investigating backend failures, combining deterministic log analysis with a local LLM."
 >
   <article class="project-detail">
     <header class="project-detail-header">
@@ -12,13 +44,15 @@ import BaseLayout from "../../../layouts/BaseLayout.astro";
         ← Back to projects
       </a>
 
-      <p class="eyebrow">PERSONAL PROJECT · IN DEVELOPMENT</p>
+      <p class="eyebrow">Personal project · Working MVP</p>
 
       <h1>Incidetective</h1>
 
       <p class="project-lead">
-        Exploring how backend engineers can investigate service incidents by
-        organizing logs, evidence, and findings.
+        A self-hosted tool for investigating backend failures. It finds the
+        recurring errors in your logs, then uses a local LLM to suggest what
+        might have caused them, with every claim pointing back to the log lines
+        behind it.
       </p>
 
       <div class="project-detail-links">
@@ -32,52 +66,143 @@ import BaseLayout from "../../../layouts/BaseLayout.astro";
       </div>
     </header>
 
+    <figure class="screenshot screenshot-lead">
+      <div class="screenshot-bar" aria-hidden="true">
+        <span></span>
+        <span></span>
+        <span></span>
+      </div>
+      <Image
+        src={detailScreenshot}
+        alt="Incidetective incident view: a checkout incident with a summary of 70 errors across 180 logs, and its top failure pattern, a payment gateway timeout seen 40 times, with three original log lines as supporting evidence."
+        widths={[400, 800, 1200, 1600]}
+        sizes="(max-width: 864px) 100vw, 800px"
+        loading="eager"
+        fetchpriority="high"
+      />
+      <figcaption>
+        An incident's failure patterns, each backed by the original log lines.
+      </figcaption>
+    </figure>
+
     <div class="project-detail-body">
       <section>
         <h2>The problem</h2>
         <p>
-          Investigating service failures often means working through logs,
-          identifying relevant events, and collecting evidence before
-          understanding what went wrong.
+          When a service fails, the evidence is usually buried in thousands of
+          log lines, often in several formats. Pasting them all into an LLM is
+          tempting, but the model then has to find the signal itself. It tends
+          to fixate on lines that look alarming but are normal for that system,
+          and it's hard to check where its conclusions came from.
         </p>
         <p>
-          Incidetective is a learning project focused on making that
-          investigation process more structured.
+          Incidetective does the mechanical part deterministically first, and
+          only then asks a model to reason about the result.
         </p>
       </section>
 
       <section>
-        <h2>Technical approach</h2>
-        <p>
-          The project uses TypeScript and Node.js, with an emphasis on
-          separating incident data, log evidence, and investigation logic.
-        </p>
-        <p>
-          Automated tests help verify the expected behavior, including keeping
-          evidence associated with the correct incident.
-        </p>
+        <h2>How it works</h2>
+        <ol class="pipeline">
+          {pipeline.map((item) => (
+            <li>
+              <h3>{item.step}</h3>
+              <p>{item.text}</p>
+            </li>
+          ))}
+        </ol>
       </section>
 
       <section>
-        <h2>Project goals</h2>
+        <h2>Keeping the AI grounded</h2>
         <p>
-          The longer-term goal is to support searching synthetic logs,
-          assembling investigation reports, and experimenting with optional
-          AI-assisted analysis.
+          AI output is treated as hypotheses, not answers. A few design choices
+          make each one checkable:
         </p>
-        <p>
-          The project is still in development, so these goals should not be
-          interpreted as completed features.
-        </p>
-      </section>
-
-      <section>
-        <h2>Technologies</h2>
-        <ul class="project-detail-tech">
-          <li>TypeScript</li>
-          <li>Node.js</li>
-          <li>Vitest</li>
+        <ul class="detail-list">
+          <li>
+            <strong>Evidence references.</strong> Every hypothesis cites the
+            error findings (<code>F1</code>, <code>F2</code>) and contextual
+            warnings (<code>C1</code>, <code>C2</code>) it relies on, so you can
+            open the original lines and judge for yourself.
+          </li>
+          <li>
+            <strong>Ruled-out evidence.</strong> The model lists
+            alarming-looking lines it judged unrelated, with a reason, instead
+            of quietly building a theory on them.
+          </li>
+          <li>
+            <strong>Setup notes.</strong> Each service can carry notes on what's
+            normal for it: versions, hardware, routine messages. That stops the
+            model from blaming things that are expected.
+          </li>
+          <li>
+            <strong>Local models.</strong> Inference runs on Ollama on my own
+            hardware, so logs never leave the network.
+          </li>
         </ul>
+      </section>
+
+      <figure class="screenshot">
+        <div class="screenshot-bar" aria-hidden="true">
+          <span></span>
+          <span></span>
+          <span></span>
+        </div>
+        <Image
+          src={aiScreenshot}
+          alt="Incidetective's AI investigation of the checkout incident: a summary, two ranked hypotheses with cited evidence (F1, F2) and next steps, one alert ruled out as a downstream symptom, and suggested follow-up diagnostics."
+          widths={[400, 680, 1020, 1360]}
+          sizes="(max-width: 744px) 100vw, 680px"
+        />
+        <figcaption>
+          An AI investigation of the checkout incident. The model's answer is a
+          hand-written stand-in; the prompt, evidence IDs, validation and UI are
+          the real app.
+        </figcaption>
+      </figure>
+
+      <section>
+        <h2>Measuring whether it helps</h2>
+        <p>
+          The obvious question is whether this beats just pasting the logs into
+          the same model. An eval harness answers that. For each incident with a
+          known cause, it produces two answers: one from Incidetective's full
+          pipeline, and one from the same model given the raw files.
+        </p>
+        <p>
+          The eight cases range from a small synthetic Redis pool exhaustion,
+          through Hadoop failures from the Loghub research dataset (up to about
+          100,000 lines), to two real incidents from my own machines: a GPU
+          backend corrupting Ollama's output, and a Coolify deployment failing
+          on a port conflict. Each answer is scored on whether it names the real
+          cause, cites the lines that prove it, and suggests a check that would
+          confirm it. Scored results go into the pull request that changes the
+          analysis, as evidence that the change helped.
+        </p>
+      </section>
+
+      <section>
+        <h2>Tech stack</h2>
+        <dl class="project-facts">
+          {stack.map((row) => (
+            <div>
+              <dt>{row.area}</dt>
+              <dd>{row.tech}</dd>
+            </div>
+          ))}
+        </dl>
+      </section>
+
+      <section>
+        <h2>Limitations and what's next</h2>
+        <p>
+          It's a working MVP meant for local and trusted environments. Logs are
+          imported by hand, AI investigations aren't saved yet, and a model's
+          conclusions can still be wrong, which is why the evidence trail
+          matters. Next on the roadmap are guided follow-up investigations,
+          automated log collection and a public demo mode.
+        </p>
       </section>
     </div>
   </article>

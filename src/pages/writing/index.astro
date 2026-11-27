@@ -1,0 +1,38 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import { formatDate, getVisiblePosts } from "../../lib/writing";
+
+const posts = await getVisiblePosts();
+---
+
+<BaseLayout
+  title="Writing | Michael Søby"
+  description="Notes and thoughts on software, projects and whatever else I'm curious about."
+>
+  <section class="page-intro">
+    <p class="eyebrow">Writing</p>
+    <h1>Notes & thoughts</h1>
+    <p>Software, projects, and whatever else I'm curious about.</p>
+  </section>
+
+  {posts.length === 0 ? (
+    <p class="writing-empty">Nothing published yet.</p>
+  ) : (
+    <ul class="post-list">
+      {posts.map((post) => (
+        <li>
+          <a href={`/writing/${post.id}/`} class="post-link">
+            <time datetime={post.data.date.toISOString()}>
+              {formatDate(post.data.date)}
+            </time>
+            <span class="post-link-title">
+              {post.data.title}
+              {post.data.draft && <span class="draft-badge">Draft</span>}
+            </span>
+            <span class="post-link-description">{post.data.description}</span>
+          </a>
+        </li>
+      ))}
+    </ul>
+  )}
+</BaseLayout>

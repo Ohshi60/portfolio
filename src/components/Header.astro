@@ -1,15 +1,44 @@
 ---
+import { Image } from "astro:assets";
 import ThemeToggle from "./ThemeToggle.astro";
+import headshot from "../assets/headshot.jpg";
+import { hasPublishedPosts } from "../lib/writing";
+
+const links = [
+  { href: "/", label: "Home" },
+  { href: "/projects/", label: "Projects" },
+  // "Writing" only appears once at least one post is published.
+  ...((await hasPublishedPosts())
+    ? [{ href: "/writing/", label: "Writing" }]
+    : []),
+  { href: "/about/", label: "About" },
+];
+
+const path = Astro.url.pathname;
+const isCurrent = (href: string) =>
+  href === "/" ? path === "/" : path.startsWith(href);
 ---
 
 <header>
-  <a href="/" class="site-logo" aria-label="Michael, home">
-    <img src="/images/cv_headshot.jpg" alt="" />
+  <a href="/" class="site-logo" aria-label="Michael Søby, home">
+    <Image
+      src={headshot}
+      alt=""
+      widths={[48, 96]}
+      sizes="44px"
+      loading="eager"
+    />
   </a>
 
   <nav aria-label="Main navigation">
-    <a href="/">Home</a>
-    <a href="/projects/">Projects</a>
+    {links.map((link) => (
+      <a
+        href={link.href}
+        aria-current={isCurrent(link.href) ? "page" : undefined}
+      >
+        {link.label}
+      </a>
+    ))}
   </nav>
 
   <ThemeToggle />

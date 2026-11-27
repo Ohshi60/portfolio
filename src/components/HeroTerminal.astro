@@ -1,0 +1,49 @@
+---
+// Each line reveals in sequence; `--i` sets its position in the stagger.
+const logLines = [
+  { level: "INFO", key: "focus", value: "reliable apis & tools" },
+  { level: "INFO", key: "stack", value: "ts · node · fastify" },
+  { level: "INFO", key: "data", value: "postgres · drizzle · bigquery" },
+  { level: "INFO", key: "infra", value: "terraform · gcp · linux" },
+  { level: "WARN", key: "building", value: "incidetective (wip)" },
+];
+---
+
+<figure
+  class="terminal"
+  aria-label="Terminal summary of Michael's focus and stack"
+>
+  <div class="terminal-bar" aria-hidden="true">
+    <span class="terminal-dot"></span>
+    <span class="terminal-dot"></span>
+    <span class="terminal-dot"></span>
+    <span class="terminal-title">michael@portfolio: ~</span>
+  </div>
+
+  <div class="terminal-body">
+    <p class="t-line" style="--i: 0">
+      <span class="t-prompt">$</span> whoami
+    </p>
+    <p class="t-line t-output" style="--i: 1">
+      michael — backend engineer
+    </p>
+
+    <p class="t-line" style="--i: 2">
+      <span class="t-prompt">$</span> tail focus.log
+    </p>
+    {logLines.map((line, index) => (
+      <p class="t-line t-log" style={`--i: ${index + 3}`}>
+        <span class={`t-level t-level-${line.level.toLowerCase()}`}>
+          {line.level}
+        </span>
+        <span class="t-key">{line.key}</span>
+        <span class="t-value">{line.value}</span>
+      </p>
+    ))}
+
+    <p class="t-line" style={`--i: ${logLines.length + 3}`}>
+      <span class="t-prompt">$</span>
+      <span class="t-cursor" aria-hidden="true"></span>
+    </p>
+  </div>
+</figure>

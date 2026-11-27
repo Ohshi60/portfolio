@@ -1,0 +1,96 @@
+---
+// Real response from a running Incidetective instance
+// (`GET /api/incidents/:id/report`), abridged to one finding with the
+// `auth-service: ` message prefix and the summary field trimmed.
+// Shape: `InvestigationReport` in the Incidetective repo's shared/types/report.ts.
+const exampleReport = {
+  title: "Deployment smoke test",
+  service: "auth-service",
+  severity: "low",
+  findings: [
+    {
+      level: "error",
+      pattern: "Redis connection refused: ECONNREFUSED <IP>:<NUM>",
+      occurrences: 1,
+      evidence: [
+        {
+          timestamp: "2026-11-12T12:10:25.200Z",
+          message: "Redis connection refused: ECONNREFUSED 10.0.0.9:6379",
+        },
+      ],
+    },
+  ],
+};
+
+function escapeHtml(text: string) {
+  return text
+    .replaceAll("&", "&amp;")
+    .replaceAll("<", "&lt;")
+    .replaceAll(">", "&gt;");
+}
+
+// Minimal JSON highlighter: wraps keys, strings and numbers in spans.
+function highlightJson(value: unknown) {
+  return escapeHtml(JSON.stringify(value, null, 2)).replace(
+    /("(?:[^"\\]|\\.)*")(\s*:)?|\b(\d+)\b/g,
+    (match, str, colon, num) => {
+      if (num) return `<span class="j-number">${num}</span>`;
+      if (colon) return `<span class="j-key">${str}</span>${colon}`;
+      return `<span class="j-string">${str}</span>`;
+    },
+  );
+}
+
+const technologies = ["TypeScript", "Fastify", "React", "PostgreSQL", "Ollama"];
+---
+
+<section class="featured" aria-labelledby="featured-title">
+  <article class="featured-card">
+    <div class="featured-content">
+      <p class="eyebrow">Featured project</p>
+
+      <div class="featured-heading">
+        <h2 id="featured-title">Incidetective</h2>
+        <span class="status-badge">
+          <span class="status-dot" aria-hidden="true"></span>
+          Working MVP
+        </span>
+      </div>
+
+      <p class="featured-description">
+        A self-hosted tool for investigating backend failures. It clusters
+        recurring errors in imported logs, then uses a local LLM to propose
+        hypotheses that link back to the original log evidence.
+      </p>
+
+      <ul class="tag-list" aria-label="Technologies">
+        {technologies.map((tech) => (
+          <li>{tech}</li>
+        ))}
+      </ul>
+
+      <div class="featured-links">
+        <a class="link-arrow" href="/projects/incidetective/">
+          View project <span aria-hidden="true">→</span>
+        </a>
+        <a
+          class="link-arrow link-muted"
+          href="https://github.com/Ohshi60/Incidetective"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          Source <span aria-hidden="true">↗</span>
+        </a>
+      </div>
+    </div>
+
+    <figure class="code-window">
+      <div class="code-window-bar">
+        <span class="code-method">GET</span>
+        <span>/incidents/:id/report</span>
+      </div>
+      <pre><code set:html={highlightJson(exampleReport)} /></pre>
+      <figcaption>Live response, abridged to 1 of 4 findings</figcaption>
+    </figure>
+  </article>
+</section>

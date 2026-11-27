@@ -1,0 +1,334 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import Todo from "../components/Todo.astro";
+import { Image } from "astro:assets";
+import headshot from "../assets/headshot.jpg";
+import decks from "../assets/about/decks.jpg";
+import lily58 from "../assets/about/lily58.jpg";
+import lily58Underside from "../assets/about/lily58-underside.jpg";
+import kyria from "../assets/about/kyria.jpg";
+import kyriaUnderside from "../assets/about/kyria-underside.jpg";
+import keyboardsProfile from "../assets/about/keyboards-profile.jpg";
+
+// ---------------------------------------------------------------------------
+// Content. Any value starting with "TODO:" renders as a visible placeholder.
+// Photos: put them in src/assets/about/ and import them, e.g.
+//   import kyria from "../assets/about/kyria.jpg";
+// then set `image: kyria` on the keyboard (or `image` on records) below.
+// Strip location metadata first: the repo is public.
+// ---------------------------------------------------------------------------
+
+const homelab = {
+  intro:
+    "My homelab follows the TinyMiniMicro idea: instead of a rack of loud servers, it's a handful of tiny business PCs and a thin client. They're quiet, frugal with power, and plenty for running my own projects.",
+  machines: [
+    {
+      name: "Balthazar",
+      model: "Dell Wyse 5070",
+      cpu: "Quad-core, 1.5 GHz",
+      ram: "8 GB",
+      storage: "16 GB eMMC",
+    },
+    {
+      name: "Sigrid",
+      model: "HP EliteDesk 800 G4",
+      cpu: "Intel Core i5-8500T, 6 cores",
+      ram: "16 GB",
+      storage: "512 GB NVMe",
+    },
+    {
+      name: "Bente",
+      model: "Lenovo ThinkCentre M710q",
+      cpu: "Intel Core i3-6100T",
+      ram: "16 GB",
+      storage: "256 GB NVMe + 256 GB SSD",
+    },
+  ],
+  specs: [
+    { area: "Platform", value: "3-node Proxmox VE cluster, Coolify for apps" },
+    {
+      area: "Runs",
+      value: "Home Assistant, Jellyfin, Incidetective, Night City dashboard",
+    },
+    { area: "Ingress", value: "Caddy as reverse proxy, Cloudflare Tunnel" },
+    { area: "Local AI", value: "Ollama on my desktop GPU" },
+  ],
+};
+
+const keyboardsIntro =
+  "Both are kits from splitkb that I soldered and assembled myself, and both run the stock firmware. What I learned: next time I'd go wireless, and I'd skip the RGB. It was a lot of extra soldering for lights I barely use.";
+
+type Keyboard = {
+  name: string;
+  layout: string;
+  switches: string;
+  extras: string;
+  image?: ImageMetadata;
+  /** Optional second photo, revealed on hover/focus (e.g. the soldered underside). */
+  underside?: ImageMetadata;
+};
+
+const keyboards: Keyboard[] = [
+  {
+    name: "Lily58",
+    layout: "58 keys, column-staggered, with a number row",
+    switches: "Gazzew Boba U4, silent tactile (62 g)",
+    extras: "Rotary encoder, RGB, low-profile case",
+    image: lily58,
+    underside: lily58Underside,
+  },
+  {
+    name: "Kyria",
+    layout: "Column-staggered, with a big thumb cluster",
+    switches: "Kailh Choc Sunset, low-profile tactile (40 gf)",
+    extras: "Two OLED displays, RGB, low-profile case",
+    image: kyria,
+    underside: kyriaUnderside,
+  },
+];
+
+const records = {
+  intro:
+    "I'm a bedroom DJ. It started with golden-age hip hop, and I fell in love with scratching. These days it's sampling that excites me most: recognising where a sample comes from and going down rabbit holes on WhoSampled. That's what drives my crate digging too, mostly at markets and thrift stores, always on the lookout for something worth sampling.",
+  // Optional: a photo of the decks, e.g. import decks from "../assets/about/decks.jpg"
+  image: decks as ImageMetadata | undefined,
+  setup: [
+    {
+      area: "Turntables",
+      value: "2 × Technics SL-1210 MK2",
+    },
+    { area: "Mixer", value: "Pioneer DJM-400" },
+    { area: "Roots", value: "Golden-age hip hop and scratching" },
+    { area: "Digs for", value: "Anything worth sampling" },
+    {
+      area: "Best find",
+      value:
+        "Santa Esmeralda's \"Don't Let Me Be Misunderstood\" on LP. It's the track behind the Bride's fight with O-Ren Ishii in Kill Bill Vol. 1, and the album version turns out to run about 15 minutes.",
+    },
+  ],
+};
+
+const isTodo = (value: string) => value.startsWith("TODO:");
+const stripTodo = (value: string) => value.replace(/^TODO:\s*/, "");
+// "Some text TODO: note" -> ["Some text", "note"]; no TODO -> [value, ""]
+const splitTodo = (value: string) => {
+  const [text, todo = ""] = value.split("TODO:");
+  return [text.trim(), todo.trim()];
+};
+---
+
+<BaseLayout
+  title="About | Michael Søby"
+  description="About Michael Søby: backend engineer, homelab tinkerer, split-keyboard builder and bedroom DJ."
+>
+  <div class="about">
+    <header class="about-header">
+      <div class="about-intro">
+        <p class="eyebrow">About</p>
+        <h1>Hi, I'm Michael.</h1>
+        <p class="about-lead">
+          I'm a backend-focused software engineer. Outside work I like building
+          things I can take apart: split keyboards I've assembled myself, and a
+          homelab that runs my own projects. When I'm not at a keyboard, I'm
+          usually at the turntables or digging for records.
+        </p>
+        <p class="about-lead">
+          I'm based in Copenhagen and studied software engineering at Aalborg
+          University. I've worked as a fullstack developer, mostly on the
+          backend side: APIs, databases, and the production issues that come
+          with them. I'm currently looking for my next backend role.
+        </p>
+      </div>
+
+      <div class="about-photo">
+        <Image
+          src={headshot}
+          alt="Michael Søby"
+          widths={[200, 400]}
+          sizes="200px"
+          loading="eager"
+          fetchpriority="high"
+        />
+      </div>
+    </header>
+
+    <section class="about-section" aria-labelledby="homelab-title">
+      <p class="section-label">01 — Homelab</p>
+      <h2 id="homelab-title">The homelab</h2>
+      <p class="about-text">{homelab.intro}</p>
+
+      <div class="machine-grid">
+        {homelab.machines.map((machine) => (
+          <article class="machine-card">
+            <h3>{machine.name}</h3>
+            <p class="machine-model">{machine.model}</p>
+            <dl>
+              <div>
+                <dt>CPU</dt>
+                <dd>{machine.cpu}</dd>
+              </div>
+              <div>
+                <dt>RAM</dt>
+                <dd>{machine.ram}</dd>
+              </div>
+              <div>
+                <dt>Disk</dt>
+                <dd>{machine.storage}</dd>
+              </div>
+            </dl>
+          </article>
+        ))}
+      </div>
+
+      <dl class="project-facts">
+        {homelab.specs.map((row) => (
+          <div>
+            <dt>{row.area}</dt>
+            <dd>
+              {splitTodo(row.value)[0]}{" "}
+              {splitTodo(row.value)[1] && (
+                <Todo text={splitTodo(row.value)[1]} />
+              )}
+            </dd>
+          </div>
+        ))}
+      </dl>
+
+      <p class="about-crosslink">
+        Both{" "}
+        <a class="link-arrow" href="/projects/incidetective/">
+          Incidetective <span aria-hidden="true">→</span>
+        </a>{" "}
+        and the{" "}
+        <a class="link-arrow" href="/projects/night-city-dashboard/">
+          Night City dashboard <span aria-hidden="true">→</span>
+        </a>{" "}
+        run here, and one of Incidetective's real test incidents came from here
+        too.
+      </p>
+    </section>
+
+    <section class="about-section" aria-labelledby="keyboards-title">
+      <p class="section-label">02 — Keyboards</p>
+      <h2 id="keyboards-title">Split keyboards</h2>
+      <p class="about-text">
+        {splitTodo(keyboardsIntro)[0]}{" "}
+        {splitTodo(keyboardsIntro)[1] && (
+          <Todo text={splitTodo(keyboardsIntro)[1]} />
+        )}
+      </p>
+
+      <div class="keyboard-grid">
+        {keyboards.map((kb) => (
+          <article class="keyboard-card">
+            {kb.image && (
+              <div
+                class:list={[
+                  "keyboard-photo",
+                  { "has-underside": kb.underside },
+                ]}
+                tabindex={kb.underside ? 0 : undefined}
+              >
+                <Image
+                  src={kb.image}
+                  alt={`My ${kb.name} keyboard, both halves seen from above`}
+                  widths={[400, 800]}
+                  sizes="(max-width: 700px) 100vw, 400px"
+                />
+                {kb.underside && (
+                  <>
+                    <Image
+                      class="keyboard-photo-underside"
+                      src={kb.underside}
+                      alt={`The underside of my ${kb.name} through its clear acrylic bottom plate, showing the hand-soldered diodes and LEDs`}
+                      widths={[400, 800]}
+                      sizes="(max-width: 700px) 100vw, 400px"
+                    />
+                    <span class="keyboard-flip-hint" aria-hidden="true">
+                      <span class="hint-front">↻ Underside</span>
+                      <span class="hint-back">↻ Top</span>
+                    </span>
+                  </>
+                )}
+              </div>
+            )}
+            <div class="keyboard-body">
+              <h3>
+                {isTodo(kb.name) ? <Todo text={stripTodo(kb.name)} /> : kb.name}
+              </h3>
+              <dl class="keyboard-specs">
+                <div>
+                  <dt>Layout</dt>
+                  <dd>
+                    {isTodo(kb.layout) ? (
+                      <Todo text={stripTodo(kb.layout)} />
+                    ) : (
+                      kb.layout
+                    )}
+                  </dd>
+                </div>
+                <div>
+                  <dt>Switches</dt>
+                  <dd>
+                    {splitTodo(kb.switches)[0]}{" "}
+                    {splitTodo(kb.switches)[1] && (
+                      <Todo text={splitTodo(kb.switches)[1]} />
+                    )}
+                  </dd>
+                </div>
+                <div>
+                  <dt>Extras</dt>
+                  <dd>{kb.extras}</dd>
+                </div>
+              </dl>
+            </div>
+          </article>
+        ))}
+      </div>
+
+      <figure class="photo keyboards-profile">
+        <Image
+          src={keyboardsProfile}
+          alt="The two keyboards side by side at desk level: the Kyria's low-profile Choc switches and keycaps on the left, much flatter than the Lily58's taller MX-style switches and keycaps on the right."
+          widths={[400, 800, 1200, 1600]}
+          sizes="(max-width: 864px) 100vw, 800px"
+        />
+        <figcaption>
+          Low profile next to standard height: the Kyria's Kailh Chocs beside
+          the Lily58's MX-style switches.
+        </figcaption>
+      </figure>
+    </section>
+
+    <section class="about-section" aria-labelledby="records-title">
+      <p class="section-label">03 — Records</p>
+      <h2 id="records-title">Turntables and crate digging</h2>
+      <p class="about-text">{records.intro}</p>
+
+      {records.image && (
+        <div class="records-photo">
+          <Image
+            src={records.image}
+            alt="My DJ setup: two Technics SL-1210 turntables either side of a Pioneer DJM-400 mixer, on a shelf full of records, with Enter the Wu-Tang and Illmatic on the wall above"
+            widths={[400, 800, 1200, 1600]}
+            sizes="(max-width: 864px) 100vw, 800px"
+          />
+        </div>
+      )}
+
+      <dl class="project-facts">
+        {records.setup.map((row) => (
+          <div>
+            <dt>{row.area}</dt>
+            <dd>
+              {splitTodo(row.value)[0]}{" "}
+              {splitTodo(row.value)[1] && (
+                <Todo text={splitTodo(row.value)[1]} />
+              )}
+            </dd>
+          </div>
+        ))}
+      </dl>
+    </section>
+  </div>
+</BaseLayout>

@@ -1,48 +1,84 @@
 ---
+import { Image } from "astro:assets";
 import BaseLayout from "../../layouts/BaseLayout.astro";
+import incidetectiveThumb from "../../assets/incidetective/incidetective-detail.png";
+import nightCityThumb from "../../assets/night-city/ipad-desk.jpg";
+
+const projects = [
+  {
+    name: "Incidetective",
+    status: "Working MVP",
+    href: "/projects/incidetective/",
+    repo: "https://github.com/Ohshi60/Incidetective",
+    image: incidetectiveThumb,
+    imageAlt: "Incidetective incident view with failure patterns",
+    description:
+      "A self-hosted tool for investigating backend failures. It clusters recurring errors in imported logs, then uses a local LLM to propose causes that link back to the original evidence.",
+    technologies: ["TypeScript", "Fastify", "React", "PostgreSQL", "Ollama"],
+  },
+  {
+    name: "Night City dashboard",
+    status: "Running at home",
+    href: "/projects/night-city-dashboard/",
+    repo: "https://github.com/Ohshi60/night-city-dashboard",
+    image: nightCityThumb,
+    imageAlt:
+      "The Night City dashboard running on a first-generation iPad mini on a desk",
+    description:
+      "A Home Assistant dashboard for my apartment, built to run on a 2012 iPad mini: lighting scenes, electricity prices with the cheapest time to run appliances, and vacuum status in plain language.",
+    technologies: ["Node.js", "Fastify", "ES5 JavaScript", "Home Assistant"],
+  },
+];
 ---
 
 <BaseLayout
-  title="Projects | Michael"
-  description="Software projects I've built and worked on."
+  title="Projects | Michael Søby"
+  description="Projects by Michael Søby: Incidetective, a tool for investigating backend failures, and the Night City Home Assistant dashboard."
 >
   <section class="page-intro">
     <p class="eyebrow">SELECTED WORK</p>
     <h1>Projects</h1>
-    <p>A selection of projects I've built, explored, and learned from.</p>
+    <p>
+      Things I've built for my own use and run on my own hardware: a tool for
+      working out why a service failed, and the dashboard on my desk.
+    </p>
   </section>
 
   <section class="projects-list" aria-label="Projects">
-    <article class="project-card">
-      <div class="project-card-content">
-        <p class="project-status">In development</p>
+    {projects.map((project, index) => (
+      <article class="project-card">
+        <a href={project.href} class="project-card-image" tabindex="-1">
+          <Image
+            src={project.image}
+            alt={project.imageAlt}
+            widths={[360, 720]}
+            sizes="(max-width: 700px) 100vw, 360px"
+            loading={index === 0 ? "eager" : "lazy"}
+            fetchpriority={index === 0 ? "high" : "auto"}
+          />
+        </a>
 
-        <h2>Incidetective</h2>
+        <div class="project-card-content">
+          <p class="project-status">{project.status}</p>
+          <h2>
+            <a href={project.href}>{project.name}</a>
+          </h2>
+          <p class="project-description">{project.description}</p>
 
-        <p class="project-description">
-          An incident investigation tool for backend services, designed to
-          organize logs, evidence, and investigation reports.
-        </p>
+          <ul class="project-technologies" aria-label="Technologies">
+            {project.technologies.map((tech) => (
+              <li>{tech}</li>
+            ))}
+          </ul>
 
-        <ul class="project-technologies" aria-label="Technologies">
-          <li>TypeScript</li>
-          <li>Node.js</li>
-          <li>Fastify</li>
-          <li>Vitest</li>
-        </ul>
-
-        <div class="project-card-links">
-          <a href="/projects/incidetective/">View project →</a>
-
-          <a
-            href="https://github.com/Ohshi60/Incidetective"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            GitHub ↗
-          </a>
+          <div class="project-card-links">
+            <a href={project.href}>View project →</a>
+            <a href={project.repo} target="_blank" rel="noopener noreferrer">
+              GitHub ↗
+            </a>
+          </div>
         </div>
-      </div>
-    </article>
+      </article>
+    ))}
   </section>
 </BaseLayout>

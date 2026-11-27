@@ -1,0 +1,55 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+---
+
+<BaseLayout
+  title="Page not found | Michael Søby"
+  description="This page doesn't exist."
+>
+  <section class="not-found">
+    <figure class="terminal not-found-terminal" aria-label="Page not found">
+      <div class="terminal-bar" aria-hidden="true">
+        <span class="terminal-dot"></span>
+        <span class="terminal-dot"></span>
+        <span class="terminal-dot"></span>
+        <span class="terminal-title">michael@portfolio: ~</span>
+      </div>
+      <div class="terminal-body">
+        <p class="t-line" style="--i: 0">
+          <span class="t-prompt">$</span> cat{" "}
+          <span id="missing-path">this-page</span>
+        </p>
+        <p class="t-line t-log" style="--i: 1">
+          <span class="t-level t-level-warn">ERR</span>
+          <span class="t-key">404</span>
+          <span class="t-value">No such file or directory</span>
+        </p>
+        <p class="t-line" style="--i: 2">
+          <span class="t-prompt">$</span>
+          <span class="t-cursor" aria-hidden="true"></span>
+        </p>
+      </div>
+    </figure>
+
+    <h1>Page not found</h1>
+    <p>That page doesn't exist, or it moved. Try one of these instead.</p>
+    <div class="hero-actions">
+      <a class="button button-primary" href="/">
+        Go home
+      </a>
+      <a class="button button-secondary" href="/projects/">
+        See projects
+      </a>
+    </div>
+  </section>
+
+  <script>
+    // Show the path the visitor actually asked for in the fake command.
+    const showPath = () => {
+      const el = document.getElementById("missing-path");
+      if (el) el.textContent = window.location.pathname;
+    };
+    showPath();
+    document.addEventListener("astro:page-load", showPath);
+  </script>
+</BaseLayout>
