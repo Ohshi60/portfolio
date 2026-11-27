@@ -1,5 +1,7 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
+import HeroTerminal from "../components/HeroTerminal.astro";
+import FeaturedProject from "../components/FeaturedProject.astro";
 ---
 
 <BaseLayout>
@@ -17,29 +19,19 @@ import BaseLayout from "../layouts/BaseLayout.astro";
         <a class="button button-primary" href="/projects/">
           View my projects
         </a>
-        <a class="button button-secondary" href="/cv.pdf">
-          View CV
-        </a>
       </div>
+      <p class="hero-aside">
+        Outside work I build split keyboards, tinker with my homelab and dig for
+        records.{" "}
+        <a class="link-arrow" href="/about/">
+          More about me <span aria-hidden="true">→</span>
+        </a>
+      </p>
     </div>
-    <div class="hero-image">
-      <img src="/images/cv_headshot.jpg" alt="Michael" />
-    </div>
+    <HeroTerminal />
   </section>
 
-  <section class="featured">
-    <div class="project-top">
-      <div class="project-details">
-        <p class="eyebrow">FEATURED PROJECT</p>
-        <h2>Incidetective</h2>
-        <p>
-          An incident investigation tool focused on finding root causes rather
-          than just symptoms.
-        </p>
-        <a href="/projects/incidetective/">View project</a>
-      </div>
-    </div>
-  </section>
+  <FeaturedProject />
   <section class="tech-stack" aria-label="Technical skills">
     <div class="feat-skills">
       <span class="skill-icon" aria-hidden="true">
@@ -97,22 +89,6 @@ import BaseLayout from "../layouts/BaseLayout.astro";
       </span>
       <h3>Infrastructure</h3>
       <p>Terraform · GCP · Linux</p>
-    </div>
-  </section>
-
-  <section class="writings">
-    <div class="blog-about">
-      <p class="eyebrow">WRITING</p>
-      <h2>Notes & thoughts</h2>
-      <p>Software, projects, and whatever else I'm curious about.</p>
-    </div>
-
-    <div class="blog-empty">
-      <h3>More to come.</h3>
-      <p>
-        I plan to share what I'm learning, building, and experimenting with
-        here.
-      </p>
     </div>
   </section>
 </BaseLayout>

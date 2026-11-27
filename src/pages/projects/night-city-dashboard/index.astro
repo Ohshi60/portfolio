@@ -1,0 +1,204 @@
+---
+import { Image } from "astro:assets";
+import BaseLayout from "../../../layouts/BaseLayout.astro";
+import overviewDay from "../../../assets/night-city/overview-day.png";
+import overviewNight from "../../../assets/night-city/overview-night.png";
+import vacuumDetails from "../../../assets/night-city/vacuum-details.png";
+
+const stack = [
+  { area: "Backend", tech: "Node.js, Fastify" },
+  {
+    area: "Frontend",
+    tech: "Plain ES5 JavaScript, HTML, CSS (no framework, no build step)",
+  },
+  { area: "Integration", tech: "Home Assistant REST API" },
+  { area: "Hardware", tech: "First-generation iPad mini, iOS 9.3" },
+  { area: "Deployment", tech: "Docker in a Proxmox VM, deployed with Coolify" },
+];
+---
+
+<BaseLayout
+  title="Night City dashboard | Michael"
+  description="A wall-mounted Home Assistant dashboard built to run on a first-generation iPad mini."
+>
+  <article class="project-detail">
+    <header class="project-detail-header">
+      <a href="/projects/" class="back-link">
+        ← Back to projects
+      </a>
+
+      <p class="eyebrow">Personal project · Running at home</p>
+
+      <h1>Night City dashboard</h1>
+
+      <p class="project-lead">
+        A wall-mounted dashboard for my apartment's Home Assistant setup, built
+        to run on a first-generation iPad mini from 2012. One glance shows the
+        lights, the electricity price, the vacuum and the weather.
+      </p>
+
+      <div class="project-detail-links">
+        <a
+          href="https://github.com/Ohshi60/night-city-dashboard"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          View source on GitHub ↗
+        </a>
+      </div>
+    </header>
+
+    <figure class="screenshot screenshot-lead">
+      <div class="screenshot-bar" aria-hidden="true">
+        <span></span>
+        <span></span>
+        <span></span>
+      </div>
+      <Image
+        src={overviewDay}
+        alt="Night City dashboard overview: lighting scenes on the left; electricity price of 3.33 kr/kWh with a bar chart and the cheapest start times for the washing machine and dishwasher; vacuum status at 80% battery with a reminder to wipe the sensors."
+        widths={[800, 1600]}
+        sizes="(max-width: 864px) 100vw, 800px"
+        loading="eager"
+      />
+      <figcaption>
+        The overview, sized to fit the iPad mini's screen in landscape. Demo
+        data.
+      </figcaption>
+    </figure>
+
+    <div class="project-detail-body">
+      <section>
+        <h2>The constraint</h2>
+        <p>
+          The iPad mini tops out at iOS 9.3, so its Safari predates almost
+          everything modern web development takes for granted: no arrow
+          functions, <code>let</code> or <code>const</code>, no
+          <code>fetch</code>, no promises. Rather than add a transpiler, the
+          frontend is written directly in ES5 with
+          <code>XMLHttpRequest</code>, and a check script fails if any newer
+          syntax slips in.
+        </p>
+        <p>
+          The old hardware shaped the rest of the design too. The page polls for
+          state every 8 seconds instead of holding a WebSocket open, and it only
+          rebuilds a card when that card's data has changed, so a tap isn't lost
+          to a re-render. The whole overview fits one 1024×690 screen, and
+          tapping a card opens its details in a panel that closes itself after a
+          minute.
+        </p>
+      </section>
+
+      <section>
+        <h2>What it shows</h2>
+        <ul class="detail-list">
+          <li>
+            <strong>Lighting.</strong> The Home Assistant scenes for the office,
+            the state of each light they control, and an "all lights off"
+            button.
+          </li>
+          <li>
+            <strong>Electricity prices.</strong> The current price per kWh
+            including tariffs and VAT, the coming hours as a chart, and the
+            cheapest time to start the washing machine or dishwasher.
+          </li>
+          <li>
+            <strong>The robot vacuum.</strong> Status, battery and consumables,
+            plus the last run in plain language: rooms it skipped and why, and
+            rooms that keep getting skipped.
+          </li>
+          <li>
+            <strong>Now playing and weather.</strong> A slim bar while something
+            plays on Plex or Jellyfin, and a weather chip with the rain outlook
+            in words.
+          </li>
+        </ul>
+      </section>
+
+      <figure class="screenshot">
+        <div class="screenshot-bar" aria-hidden="true">
+          <span></span>
+          <span></span>
+          <span></span>
+        </div>
+        <Image
+          src={vacuumDetails}
+          alt="Vacuum details panel: the last run didn't finish after 67 minutes and 35 square metres, the balcony was skipped because the door was closed and has been skipped in 2 of the last 2 runs, and wear levels for the brushes, filter, wheel and sensors."
+          widths={[680, 1360]}
+          sizes="(max-width: 744px) 100vw, 680px"
+        />
+        <figcaption>
+          Vacuum details: what happened on the last run, not just error codes.
+        </figcaption>
+      </figure>
+
+      <section>
+        <h2>Safe enough for the LAN</h2>
+        <p>
+          A dashboard that can switch the lights is still a control surface, so
+          it's deliberately narrow:
+        </p>
+        <ul class="detail-list">
+          <li>
+            The Home Assistant token stays on the server and never reaches the
+            browser. Even images such as media artwork are proxied through it.
+          </li>
+          <li>
+            The browser can't make arbitrary Home Assistant calls. The server
+            allows exactly two actions: activate one of the shown scenes, and
+            turn all lights off.
+          </li>
+          <li>
+            A strict Content Security Policy, and every POST must be same-origin
+            and carry a custom header, which guards against cross-site requests.
+          </li>
+          <li>
+            There's no login, so it's LAN-only by design and never exposed to
+            the internet.
+          </li>
+        </ul>
+      </section>
+
+      <section>
+        <h2>Demo mode and night mode</h2>
+        <p>
+          Demo mode serves made-up device states through the same summary code
+          as live mode, so the two can't drift apart, and the dashboard can be
+          developed without touching the real apartment. The screenshots on this
+          page come from it.
+        </p>
+        <p>
+          Between sunset and sunrise, the page switches to a dimmer, warmer
+          theme so it doesn't light up the room.
+        </p>
+      </section>
+
+      <figure class="screenshot">
+        <div class="screenshot-bar" aria-hidden="true">
+          <span></span>
+          <span></span>
+          <span></span>
+        </div>
+        <Image
+          src={overviewNight}
+          alt="The same overview in night mode, with dimmer, warmer colours."
+          widths={[680, 1360]}
+          sizes="(max-width: 744px) 100vw, 680px"
+        />
+        <figcaption>Night mode, from sunset to sunrise.</figcaption>
+      </figure>
+
+      <section>
+        <h2>Tech stack</h2>
+        <dl class="project-facts">
+          {stack.map((row) => (
+            <div>
+              <dt>{row.area}</dt>
+              <dd>{row.tech}</dd>
+            </div>
+          ))}
+        </dl>
+      </section>
+    </div>
+  </article>
+</BaseLayout>

@@ -1,0 +1,278 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import Todo from "../components/Todo.astro";
+import { Image } from "astro:assets";
+
+// ---------------------------------------------------------------------------
+// Content. Any value starting with "TODO:" renders as a visible placeholder.
+// Keyboard photos: put them in src/assets/about/ and import them, e.g.
+//   import corne from "../assets/about/corne.jpg";
+// then set `image: corne` on the keyboard below.
+// ---------------------------------------------------------------------------
+
+const homelab = {
+  intro:
+    "My homelab follows the TinyMiniMicro idea: instead of a rack of loud servers, it's a handful of tiny business PCs and a thin client. They're quiet, frugal with power, and plenty for running my own projects.",
+  machines: [
+    {
+      name: "Balthazar",
+      model: "Dell Wyse 5070",
+      cpu: "Quad-core, 1.5 GHz",
+      ram: "8 GB",
+      storage: "16 GB eMMC",
+    },
+    {
+      name: "Sigrid",
+      model: "HP EliteDesk 800 G4",
+      cpu: "Intel Core i5-8500T, 6 cores",
+      ram: "16 GB",
+      storage: "512 GB NVMe",
+    },
+    {
+      name: "Bente",
+      model: "Lenovo ThinkCentre M710q",
+      cpu: "Intel Core i3-6100T",
+      ram: "16 GB",
+      storage: "256 GB NVMe + 256 GB SSD",
+    },
+  ],
+  specs: [
+    { area: "Platform", value: "Proxmox, Coolify" },
+    { area: "Local AI", value: "Ollama on my desktop GPU" },
+    {
+      area: "Runs",
+      value: "Incidetective, Night City dashboard, TODO: other services",
+    },
+    { area: "Network", value: "TODO: e.g. router, VLANs, VPN, DNS" },
+  ],
+};
+
+const keyboardsIntro =
+  "Both are kits from splitkb that I assembled myself. TODO: why split keyboards: ergonomics, the fun of building, tweaking the layout";
+
+type Keyboard = {
+  name: string;
+  layout: string;
+  switches: string;
+  notes: string;
+  image?: ImageMetadata;
+};
+
+const keyboards: Keyboard[] = [
+  {
+    name: "Lily58",
+    layout: "58 keys, column-staggered, with a number row",
+    switches: "TODO: switches and keycaps",
+    notes:
+      "TODO: what you built yourself (soldering, firmware, case) and what you learned",
+  },
+  {
+    name: "Kyria",
+    layout: "Column-staggered, with a big thumb cluster",
+    switches: "Kailh Choc, for a low profile TODO: which Chocs, and keycaps",
+    notes: "TODO: build notes",
+  },
+];
+
+const records = {
+  intro:
+    "I'm a bedroom DJ, mixing records at home for the fun of it. I also collect vinyl, mostly dug out of crates at markets and thrift stores, where half the fun is finding something I didn't know I was looking for.",
+  // Optional: a photo of the decks, e.g. import decks from "../assets/about/decks.jpg"
+  image: undefined as ImageMetadata | undefined,
+  setup: [
+    {
+      area: "Turntables",
+      value: "2 × Technics SL-1210 MK2",
+    },
+    { area: "Mixer", value: "Pioneer DJM-400" },
+    { area: "Digs for", value: "TODO: genres you collect and mix" },
+    { area: "Best find", value: "TODO: a favourite record or dig story" },
+  ],
+};
+
+const isTodo = (value: string) => value.startsWith("TODO:");
+const stripTodo = (value: string) => value.replace(/^TODO:\s*/, "");
+// "Some text TODO: note" -> ["Some text", "note"]; no TODO -> [value, ""]
+const splitTodo = (value: string) => {
+  const [text, todo = ""] = value.split("TODO:");
+  return [text.trim(), todo.trim()];
+};
+---
+
+<BaseLayout
+  title="About | Michael"
+  description="About Michael: backend developer, homelab tinkerer, split-keyboard builder and bedroom DJ."
+>
+  <div class="about">
+    <header class="about-header">
+      <div class="about-intro">
+        <p class="eyebrow">About</p>
+        <h1>Hi, I'm Michael.</h1>
+        <p class="about-lead">
+          I'm a backend-focused software engineer. Outside work I like building
+          things I can take apart: split keyboards I've assembled myself, and a
+          homelab that runs my own projects. When I'm not at a keyboard, I'm
+          usually at the turntables or digging for records.
+        </p>
+        <p class="about-lead">
+          <Todo text="a few lines about you: where you're based, what you work on, what you're looking for" />
+        </p>
+      </div>
+
+      <div class="about-photo">
+        <img src="/images/cv_headshot.jpg" alt="Michael" />
+      </div>
+    </header>
+
+    <section class="about-section" aria-labelledby="homelab-title">
+      <p class="section-label">01 — Homelab</p>
+      <h2 id="homelab-title">The homelab</h2>
+      <p class="about-text">{homelab.intro}</p>
+
+      <div class="machine-grid">
+        {homelab.machines.map((machine) => (
+          <article class="machine-card">
+            <h3>{machine.name}</h3>
+            <p class="machine-model">{machine.model}</p>
+            <dl>
+              <div>
+                <dt>CPU</dt>
+                <dd>{machine.cpu}</dd>
+              </div>
+              <div>
+                <dt>RAM</dt>
+                <dd>{machine.ram}</dd>
+              </div>
+              <div>
+                <dt>Disk</dt>
+                <dd>{machine.storage}</dd>
+              </div>
+            </dl>
+          </article>
+        ))}
+      </div>
+
+      <dl class="project-facts">
+        {homelab.specs.map((row) => (
+          <div>
+            <dt>{row.area}</dt>
+            <dd>
+              {splitTodo(row.value)[0]}{" "}
+              {splitTodo(row.value)[1] && (
+                <Todo text={splitTodo(row.value)[1]} />
+              )}
+            </dd>
+          </div>
+        ))}
+      </dl>
+
+      <p class="about-crosslink">
+        Two of my projects run here: the{" "}
+        <a class="link-arrow" href="/projects/night-city-dashboard/">
+          Night City dashboard <span aria-hidden="true">→</span>
+        </a>{" "}
+        and{" "}
+        <a class="link-arrow" href="/projects/incidetective/">
+          Incidetective <span aria-hidden="true">→</span>
+        </a>
+        , which also got one of its real test incidents from here.
+      </p>
+    </section>
+
+    <section class="about-section" aria-labelledby="keyboards-title">
+      <p class="section-label">02 — Keyboards</p>
+      <h2 id="keyboards-title">Split keyboards</h2>
+      <p class="about-text">
+        {splitTodo(keyboardsIntro)[0]}{" "}
+        {splitTodo(keyboardsIntro)[1] && (
+          <Todo text={splitTodo(keyboardsIntro)[1]} />
+        )}
+      </p>
+
+      <div class="keyboard-grid">
+        {keyboards.map((kb) => (
+          <article class="keyboard-card">
+            <div class="keyboard-photo">
+              {kb.image ? (
+                <Image
+                  src={kb.image}
+                  alt={kb.name}
+                  widths={[400, 800]}
+                  sizes="(max-width: 700px) 100vw, 400px"
+                />
+              ) : (
+                <span>Photo</span>
+              )}
+            </div>
+            <div class="keyboard-body">
+              <h3>
+                {isTodo(kb.name) ? <Todo text={stripTodo(kb.name)} /> : kb.name}
+              </h3>
+              <dl class="keyboard-specs">
+                <div>
+                  <dt>Layout</dt>
+                  <dd>
+                    {isTodo(kb.layout) ? (
+                      <Todo text={stripTodo(kb.layout)} />
+                    ) : (
+                      kb.layout
+                    )}
+                  </dd>
+                </div>
+                <div>
+                  <dt>Switches</dt>
+                  <dd>
+                    {splitTodo(kb.switches)[0]}{" "}
+                    {splitTodo(kb.switches)[1] && (
+                      <Todo text={splitTodo(kb.switches)[1]} />
+                    )}
+                  </dd>
+                </div>
+              </dl>
+              <p>
+                {isTodo(kb.notes) ? (
+                  <Todo text={stripTodo(kb.notes)} />
+                ) : (
+                  kb.notes
+                )}
+              </p>
+            </div>
+          </article>
+        ))}
+      </div>
+    </section>
+
+    <section class="about-section" aria-labelledby="records-title">
+      <p class="section-label">03 — Records</p>
+      <h2 id="records-title">Turntables and crate digging</h2>
+      <p class="about-text">{records.intro}</p>
+
+      <div class="records-photo">
+        {records.image ? (
+          <Image
+            src={records.image}
+            alt="My DJ setup: two Technics turntables and a Pioneer DJM-400 mixer"
+            widths={[800, 1600]}
+            sizes="(max-width: 864px) 100vw, 800px"
+          />
+        ) : (
+          <span>Photo of the decks</span>
+        )}
+      </div>
+
+      <dl class="project-facts">
+        {records.setup.map((row) => (
+          <div>
+            <dt>{row.area}</dt>
+            <dd>
+              {splitTodo(row.value)[0]}{" "}
+              {splitTodo(row.value)[1] && (
+                <Todo text={splitTodo(row.value)[1]} />
+              )}
+            </dd>
+          </div>
+        ))}
+      </dl>
+    </section>
+  </div>
+</BaseLayout>
